@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    //1.内存溢出
+    var arrObj = {};
+    for(var i = 0; i < 1000000000;i++) {
+        arrObj[i] = new Array(1100000000);
+    console.log(arrObj);
+    }
+
+</script>
+</body>
+</html>
