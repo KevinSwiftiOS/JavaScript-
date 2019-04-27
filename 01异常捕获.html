@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    //异常抛出和捕获
+    try {
+        //可能出错的代码
+        console.log(num);
+        console.log(10);
+    }catch (e) {
+console.log(e);
+    }
+    finally {
+        console.log(50);
+    }
+    console.log(20);
+
+    //自己抛出异常
+    function divide(a,b) {
+        if(b == 0){
+            //抛出异常
+    throw '分子不能为0'
+        }//分子为0
+//正常执行
+ return a / b;
+    };
+    try {
+        divide(4,0);
+    }catch (e) {
+        console.log(e);
+    }finally {
+        //一般会在finally中释放资源。
+    }
+</script>
+</body>
+</html>

@@ -59,7 +59,7 @@
 ```
 注意**只有在调用的时候才会形成闭包，此时还没有形成闭包**
 ```
-var f =  fn1(); //通过全局变量的引用保存着值 局部韩式执行完后还想再用它
+var f =  fn1(); //通过全局变量的引用保存着值 局部函数执行完后还想再用它
      //闭包会产生内存空间的泄漏 所以最好在使用完成之后，进行释放 释放的函数为 让其指向一个空对象即可。
      f.fn2() //表示形成闭包。
 ```
@@ -117,3 +117,87 @@ f = null;
   f = null; //变成垃圾对象系统自动回收
   
 ```
+### 视频4重点 异常处理
+通过try catch来捕获异常，try里面是有问题的代码，catch来捕获异常，finally里是都会执行的代码。一般在finally中执行释放内存等操作。
+``` 
+ //异常抛出和捕获
+    try {
+        //可能出错的代码
+        console.log(num);
+        console.log(10);
+    }catch (e) {
+console.log(e);
+    }
+    finally {
+        console.log(50);
+    }
+    console.log(20);
+```
+num未定义，会被抛出，在catch中捕获异常并且输出。
+我们也可以自定义异常，当发现错误的时候throw抛出。
+``` 
+    //自己抛出异常
+    function divide(a,b) {
+        if(b == 0){
+            //抛出异常
+    throw '分子不能为0'
+        }//分子为0
+//正常执行
+ return a / b;
+    };
+```
+除法操作中，当b为0的时候，抛出异常。如果没有抛出异常，后面正常的执行a / b;
+``` 
+ try {
+        divide(4,0);
+    }catch (e) {
+        console.log(e);
+    }finally {
+        //一般会在finally中释放资源。
+    }
+```
+通过try/catch语句来捕获异常。这里会捕获异常，并且输出分子不能为0，一般在finally中执行释放资源操作。
+### 视频6重点 面向对象
+对象的创建，通过字典形式创建。
+``` 
+ //字面量创建对象 代码复用性差
+    var p1 = {
+        name:"张飒",
+        run:function () {
+            console.log(this.name + "跑");
+        }
+    };
+    console.log(p1.run());
+    console.log(p1.name);
+    //通过内置构造函数创建
+```
+通过创建new object来创建
+``` 
+ var p2 = new Object();
+    p2.name = "张三";
+    p2.run = function () {
+        console.log(this.name + "run");
+    };//来做数据的传递
+
+```
+上述两种都有问题，没有抽离出公共的属性。导致复用性比较低。
+所以可以通过自定义构造函数的方法，注意以下几点。
+  1.函数首字母大写
+  2.在创建过程中使用new关键字
+  3.函数内部自动创建对象，赋值this指针
+  4.自动返回创建出来的对象
+ ``` 
+  function Person(name,age,sex) {
+      //var this = new Object();
+         //指向新的产生对象 自动创建一个空对象
+         //对象地址给了this this指向了新对象
+         //2.this给空对象 绑定属性和行为
+         this.name = name;
+         this.sex = sex;
+         this.age = age;
+         //3 返回this return this
+     }
+     var p = new Person();
+ ```
+ 在函数体内部，会自动创建一个this指针，自动创建this，后续我们给this绑定属性和方法。
+ 最后我们会返回this出来给用户调用。所以我们在创建该对象的时候通过new Person()来创建。

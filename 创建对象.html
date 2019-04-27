@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    //字面量创建对象 代码复用性差
+    var p1 = {
+        name:"张飒",
+        run:function () {
+            console.log(this.name + "跑");
+        }
+    };
+    console.log(p1.run());
+    console.log(p1.name);
+    //通过内置构造函数创建
+    var p2 = new Object();
+    p2.name = "张三";
+    p2.run = function () {
+        console.log(this.name + "run");
+    };//来做数据的传递
+    //通过简单的工厂创建
+    //通过自定义构造函数写
+    //1.函数首字母大写
+    //2.在创建过程中使用new关键字
+    //3.函数内部自动创建对象，赋值this指针
+    //4.自动返回创建出来的对象
+    function Person(name,age,sex) {
+     //var this = new Object();
+        //指向新的产生对象 自动创建一个空对象
+        //对象地址给了this this指向了新对象
+        //2.this给空对象 绑定属性和行为
+        this.name = name;
+        this.sex = sex;
+        this.age = age;
+        //3 返回this return this
+    }
+    var p = new Person();
+</script>
+</body>
+</html>
