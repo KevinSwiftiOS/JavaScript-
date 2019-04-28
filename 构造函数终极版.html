@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    //将原型链上所有的东西都删除掉
+    function Dog(options) {
+        // this.name = options.name;
+        // this.age = options.age;
+this._init(options);
+    }
+    Dog.prototype = {
+        //初始化的方法也可以放到这里来
+        _init:function(options){
+          this.name = options.name;
+          this.age = options.age;
+        },
+        eat:function (some) {
+            console.log(this.name + some);
+        },
+        run:function (some) {
+          console.log(this.name + some);
+        }
+
+    };
+    // Dog.prototype.eat = function (some) {
+    //     console.log(this.name + some);
+    // }
+  var dog = new Dog({name:"ckq",age:19});
+  console.log(dog);
+
+</script>
+</body>
+</html>

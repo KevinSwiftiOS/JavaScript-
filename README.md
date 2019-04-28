@@ -200,4 +200,104 @@ num未定义，会被抛出，在catch中捕获异常并且输出。
      var p = new Person();
  ```
  在函数体内部，会自动创建一个this指针，自动创建this，后续我们给this绑定属性和方法。
+ 把这个对象的地址，this -> 新对象。
+ var this = new Object();
+
  最后我们会返回this出来给用户调用。所以我们在创建该对象的时候通过new Person()来创建。
+### 视频7重点 面向对象-对象优化
+1.函数体内部写返回this和不写的区别
+``` 
+function Person(name,age){
+ this.name = name;
+ this.age = age;
+ return this;
+}
+```
+```
+function Person(name){
+this.name = name;
+return 'hhh';
+}
+```
+
+1.如果不写，直接返回默认创建的新对象
+2.如果返回this,直接返回默认创建的新对象,所以不要写return
+3.如果返回基本数据类型，通过new对象创建出来的依然是person对象。
+4.如果返回{},则返回的便是{}空对象，不是person对象。[1,2,3]也是返回[1,2,3]
+4.1返回是对象，直接将这个对象返回给外界。
+### 视频8
+通过json对象传参。
+```
+//构造函数，option是object类型传进去。
+function Dog(option){
+this.name = option.name;
+this.age = option.age;
+}
+```
+对象的prototype方法，可以看成静态方法，定义在prototype上的方法是创建的对象全局共享的。
+``` 
+  function Dog(options) {
+   this.name = options.name;
+   this.age = options.age;
+    }
+    //prototype是公有的一些属性和方法，表示不需要重复创建的。所有对象都公共有的
+    Dog.prototype.eat = function (something) {
+        console.log(this.name + "吃" + something);
+    }
+    Dog.prototype.run = function (someWhere) {
+        console.log(this.name + "吃" + someWhere);
+    }
+
+```
+```
+var dog = new Dog({age:18,name:"ckq"};
+console.log(dog);//会创建出来
+```
+Dog.prototype来创建共有的属性和方法，这样就不用每个对象单独占有eat和run,而是共享一个。
+或者直接将Dog.prototype方法重新声明一份来进行创建。
+``` 
+   Dog.prototype = {
+        //初始化的方法也可以放到这里来
+        _init:function(options){
+          this.name = options.name;
+          this.age = options.age;
+        },
+        eat:function (some) {
+            console.log(this.name + some);
+        },
+        run:function (some) {
+          console.log(this.name + some);
+        }
+
+    };
+```
+这样带来的隐藏风险是原先的constructor原型链也被干掉了。所以推荐使用
+```
+Dog.prototype.run = function() {
+}
+```
+这样的方法来创建。
+或者采用终极方法来创建
+``` 
+    //将原型链上所有的东西都删除掉
+    function Dog(options) {
+        // this.name = options.name;
+        // this.age = options.age;
+this._init(options);
+    }
+    Dog.prototype = {
+        //初始化的方法也可以放到这里来
+        _init:function(options){
+          this.name = options.name;
+          this.age = options.age;
+        },
+        eat:function (some) {
+            console.log(this.name + some);
+        },
+        run:function (some) {
+          console.log(this.name + some);
+        }
+
+    };
+```
+在Dog的prototype中也定义初始化的__init方法来进行创建。在构造函数中传入__init函数，将option选项传入即可。

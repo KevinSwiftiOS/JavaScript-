@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function Dog(options) {
+   this.name = options.name;
+   this.age = options.age;
+    }
+    //prototype是公有的一些属性和方法，表示不需要重复创建的。所有对象都公共有的
+    Dog.prototype.eat = function (something) {
+        console.log(this.name + "吃" + something);
+    }
+    Dog.prototype.run = function (someWhere) {
+        console.log(this.name + "吃" + someWhere);
+    }
+
+</script>
+</body>
+</html>
