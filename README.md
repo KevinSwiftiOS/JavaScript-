@@ -301,3 +301,43 @@ this._init(options);
     };
 ```
 在Dog的prototype中也定义初始化的__init方法来进行创建。在构造函数中传入__init函数，将option选项传入即可。
+### 视频10重点 计算器实现 通过面向对象的方法
+```
+var Caculator = {
+        //结果
+        result: 0,
+        //行为 加减乘除 打印
+        jia: function (num) {
+            this.result += num;
+            return this;
+        },
+        jian: function (num) {
+            this.result -= num;
+            return this;
+        },
+        cheng: function (num) {
+            this.result *= num;
+            return this;
+        },
+        chu: function (num) {
+            this.result /= num;
+            return this;
+        },
+        log: function () {
+            console.log(this.result);
+            return this;
+        },
+        clean:function () {
+            //清零
+            this.result = 0;
+            return this;
+        }
+    };
+
+```
+因为每一个方法都返回了this,所以每个方法都返回了当前对象，所以可以进行链式调用，来进行下一步的操作。
+```
+ //链式调用
+    Caculator.add(6).chu(2).log();
+```
+输出链式调用的结果。

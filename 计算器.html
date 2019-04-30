@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var Caculator = {
+        //结果
+        result: 0,
+        //行为 加减乘除 打印
+        jia: function (num) {
+            this.result += num;
+            return this;
+        },
+        jian: function (num) {
+            this.result -= num;
+            return this;
+        },
+        cheng: function (num) {
+            this.result *= num;
+            return this;
+        },
+        chu: function (num) {
+            this.result /= num;
+            return this;
+        },
+        log: function () {
+            console.log(this.result);
+            return this;
+        },
+        clean:function () {
+            //清零
+            this.result = 0;
+            return this;
+        }
+    };
+    Caculator.jia(6);
+    Caculator.jia(6);
+    Caculator.cheng(6);
+    Caculator.chu(2);
+    Caculator.log();
+    //链式调用
+    Caculator.add(6).chu(2).log();
+</script>
+</body>
+</html>
