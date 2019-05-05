@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var obj = {"name":"张三"};
+    var arr = [1,2,3];
+    console.log(typeof obj);
+    //或者采用toString的方法进行输出
+    console.log(obj.toString());
+    console.log(typeof arr); //更多希望打印出来Array
+     //constructor 创建对象的构造函数
+    //prototype 原型链
+    console.log(arr.constructor.name);
+    console.log(obj.constructor.name);
+    //原型对象
+    Object.prototype.toString(arr);
+</script>
+</body>
+</html>

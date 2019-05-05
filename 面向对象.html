@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    //构造函数设置属性和方法
+    function Person(name,age,doFunc) {
+   //隐式会做     var this = new Object();
+        this.name = name; // 实例属性和方法 绑定在对象上
+        //静态属性，绑定在函数上的属性和方法 函数本质上是对象，所以可以动态添加属性和方法
+        this.age = age;
+        this.doFunc = doFunc;
+        //隐式会做 return this;
+        //创建静态属性，刚开始肯定是没有的 如果没有就创建，否则在其基础上++
+        if(!Person.personCnt){
+            Person.personCnt = 0;
+        }
+        Person.personCnt++;
+
+    }
+    //创建静态方法
+    Person.printPersonCnt = function () {
+        console.log("总共创建了" + Person.personCnt + "个人");
+    }
+    var p1 = new Person("ckq",18,function () {
+        console.log("张三在上课") //理解this是谁 实例属性和方法
+    });
+    var p2 = new Person("cpp",30,function () {
+        console.log("李四在放羊")
+    });
+    p1.doFunc();
+    Person.printPersonCnt();
+    console.log(typeof undefined);
+</script>
+</body>
+</html>

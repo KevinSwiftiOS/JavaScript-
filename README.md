@@ -341,3 +341,76 @@ var Caculator = {
     Caculator.add(6).chu(2).log();
 ```
 输出链式调用的结果。
+### 视频24静态属性和方法重点
+方法分为静态方法和实例方法，属性分为静态属性和实例属性，实例的是对象私有的，而静态的则是函数私有的，是全局共享的。
+实例方法和属性举例
+``` 
+   function Person(name,age,doFunc) {
+   //隐式会做     var this = new Object();
+        this.name = name; // 实例属性和方法 绑定在对象上
+        //静态属性，绑定在函数上的属性和方法 函数本质上是对象，所以可以动态添加属性和方法
+        this.age = age;
+        this.doFunc = doFunc;
+        //隐式会做 return this;
+        }
+```
+这里的name，age和doFuncs方法都是属于创建出来的new Person()对象的。
+而Person也是一个对象，可以通过在Person上面添加属性和方法，创建静态属性和方法。
+``` 
+  if(!Person.personCnt){
+            Person.personCnt = 0;
+        }
+        Person.personCnt++;
+```
+整个构造函数如下所示
+``` 
+  //构造函数设置属性和方法
+    function Person(name,age,doFunc) {
+   //隐式会做     var this = new Object();
+        this.name = name; // 实例属性和方法 绑定在对象上
+        //静态属性，绑定在函数上的属性和方法 函数本质上是对象，所以可以动态添加属性和方法
+        this.age = age;
+        this.doFunc = doFunc;
+        //隐式会做 return this;
+        //创建静态属性，刚开始肯定是没有的 如果没有就创建，否则在其基础上++
+        if(!Person.personCnt){
+            Person.personCnt = 0;
+        }
+        Person.personCnt++;
+
+    }
+```
+而静态方法的添加最好在外部，不要在构造函数内部
+``` 
+  //创建静态方法
+    Person.printPersonCnt = function () {
+        console.log("总共创建了" + Person.personCnt + "个人");
+    }
+```
+这样当创建了2个对象后，便可以通过调用静态方法打印输出有几个人
+```
+  var p1 = new Person("ckq",18,function () {
+        console.log("张三在上课") //理解this是谁 实例属性和方法
+    });
+    var p2 = new Person("cpp",30,function () {
+        console.log("李四在放羊")
+    });
+    p1.doFunc();
+    Person.printPersonCnt();
+```
+### 视频25重点 内置对象的类型判断
+可以使用typeof 查看基本数据类型 会输出object undefined string number boolean symbol
+null的判断会输出object，对于对象{}和数组array的判断也会输出object.
+对于对象类型,object 可以采用toString方法。会输出{object:object}，然而对于数组[1,2,3],则会输出1,2,3
+```
+   //或者采用toString的方法进行输出
+    console.log(obj.toString());
+```
+所以以上方法不具有普遍性。
+所以，最合适的方法是调用constructor.name次类型。表明构造的时候是什么类型的。
+``` 
+ //constructor 创建对象的构造函数
+    //prototype 原型链
+    console.log(arr.constructor.name); //打印出array
+    console.log(obj.constructor.name);//打印出object
+```
