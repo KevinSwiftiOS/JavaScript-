@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function Person() {
+    }
+    //实例化出来的实例 对象
+    var p = new Person();
+    //是否是p的原型对象
+    console.log(Person.prototype.isPrototypeOf(p));
+    p.__proto__.isPrototypeOf(p); //拿到原型对象判断
+    var obj = {
+        name:"ckq" //对象
+    };
+    //绑定到person上去
+    Person.prototype = obj;
+    //原型对象之后完成实例化
+    var p2 = new Person();
+    console.log(Person.prototype.isPrototypeOf(p2));
+
+</script>
+</body>
+</html>

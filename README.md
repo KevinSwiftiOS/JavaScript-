@@ -414,3 +414,162 @@ null的判断会输出object，对于对象{}和数组array的判断也会输出
     console.log(arr.constructor.name); //打印出array
     console.log(obj.constructor.name);//打印出object
 ```
+### 视频26重点 自定义类型的判断
+首先定义两个类
+``` 
+    //获取自定义对象类型判断
+    function Person(name,age) {
+        this.name = name;
+        this.age = age;
+    }
+    function Dog(name,age) {
+        this.name = name;
+        this.age = age;
+    }
+```
+实例化对象进行判断
+``` 
+  //实例化构造 为对象
+    var p = new Person("zs",18);
+    var d = new Person("小花",8);
+    console.log(p.toString());
+    console.log(Object.prototype.toString(p));
+    //constructor是对象的构造器，类似于一个产品上的标识器 获取类型 proto相当于原型链，对上一层逐层去找。
+    console.log(p.constructor.name);
+```
+Object.prototype.toString(p);调用了老祖宗的方法，object对象上的，对象类型是[object,Object],而数组是[object,Array]这种类型的输出。
+要获取到Person,也就是父亲一层的，调用p.construcor.name即可。相当于标识符，不需要向上面追溯到老祖宗。
+### 视频27重点
+instanceof作用 用来判断一个对象是否是属于一个类的 只要在构造函数的原型链上面，instanceof就返回true,否则返回false.
+``` 
+console.log(p instanceof Person);
+```
+判断p是否是Person派生的。若是全部判断是Object类型的，则都是true,判断是哪个派生器的，视情况而看。
+``` 
+var p = new Person();
+var p = new Person; 
+//以上两种都是返回this,指向当前对象
+var p = Person(); //this会改变，指向的是window对象。
+```
+### 视频28重点 面向对象 访问函数原型对象
+定义类 随后为原型对象添加方法
+``` 
+  //访问函数原型对象
+    function Person(name,age) {
+        this.name = name;
+        this.age = age;
+    }
+    //原型对象 prototype
+    Person.prototype.run = function () {
+        console.log("22333");
+    }
+```
+方式一可以用过原先类进行访问
+``` 
+ //方式1 通过构造函数拿到原型化对象
+    console.log(Person.prototype);
+```
+方式二可以通过实例化类进行访问
+``` 
+ //方式2 通过实例化函数拿到原型对象
+    var p = new Person();
+    console.log(p);
+    console.log(p.__proto__); //__proto__是一个非标准属性 ecmscript中没有这个属性，只是为了方便开发者调试的一个属性。
+                              //建议在开发和调试阶段使用，正式上线时不建议使用。
+```
+打印出p或者通过调用p的__proto__属性，其不是一个标准属性，ecmscript中没有该属性。只是为了方便开发者。
+可以修改p的__proto__指向，指向新的对象后，表示__proto__已经修改到了新的原型。
+``` 
+  //将指向修改掉 就是真正的修改掉了
+    var newXY = {
+        "add":function () {
+            console.log("1")
+        }
+    };
+    p.__proto__ = newXY;
+    console.log(p.__proto__);
+```
+方法证明是可以的。
+### 视频29重点 in和hasOwnProperty使用
+in 是否用户某个属性，如果对象身上没有，则会去原型对象上查找
+hasOwnProperty只会在原型对象内查找
+``` 
+  function Person(name,age) {
+        this.name = name;
+        this.age = age;
+    }
+    //原型对象上添加东西
+    Person.prototype.address = '上海';
+    //实例化Person
+    var p = new Person("ckq",18);
+    console.log("name" in p); //以字符串形式判断
+    console.log("address" in p); //优先在自己，找不到再到原型对象
+    //只在自己对象上，而不在原型对象上找
+    console.log(p.hasOwnProperty("name"));
+    //原型对象上是不会去找的
+    console.log(p.hasOwnProperty("address"));
+
+```
+
+
+### 视频30重点 isPrototypeof和instanceof使用
+instanceof 判断是否是原型对象上的构造函数创建的，**判断一个对象，是否是某个实例的原型对象**
+isPrototypeof **判断一个对象，是否是某个实例的原型对象**
+
+instanceof 判断某个对象是否是类的实例
+```
+function Person(name,age){
+this.name = name;
+this.age = age;
+}
+var p = new Person();
+console.log(p instanceof Person);
+
+```
+isPrototypeof的使用，在原型对象上判断，是否是某个实例的原型对象
+``` 
+ function Person() {
+    }
+    //实例化出来的实例 对象
+    var p = new Person();
+    //是否是p的原型对象
+    console.log(Person.prototype.isPrototypeOf(p));
+    p.__proto__.isPrototypeOf(p); //拿到原型对象判断
+```
+拿到原型后进行判断。
+### 视频31重点 constructor的使用
+constructor就是一个标识器，标识这个对象的名字
+``` 
+  function Person() {
+
+    };
+    var p = new Person();
+    console.log(p);
+    //拿到实例化对象 真实产生的构造函数
+    console.log(p.constructor.name);
+
+```
+如果修改了原型对象，则constructor会指向老祖宗object,导致错误使用。
+``` 
+
+    Person.prototype = {
+     //   constructor:Person,//一定要把原型对象 一定要设置
+        name:"cpp",
+        age:18
+    };
+    var p1 = new Person();
+    console.log(p1);
+    console.log(p1.constructor.name);
+```
+所以此时要为原型增加constructor属性，指向Person。
+``` 
+  Person.prototype = {
+       constructor:Person,//一定要把原型对象 一定要设置
+        name:"cpp",
+        age:18
+    };
+    var p1 = new Person();
+    console.log(p1);
+    console.log(p1.constructor.name);
+```
+

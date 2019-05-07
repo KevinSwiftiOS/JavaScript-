@@ -1,10 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>
+    .red{
+      fill: none;
+        stroke: black;
+        stroke-width: 3pt;
+    }
+    </style>
     <meta charset="UTF-8">
     <title>Title</title>
+
 </head>
 <body>
+<svg width="100" height="100">
+    <path d="
+  M 18,3
+  L 46,3
+  L 46,40
+  L 61,40
+  L 32,68
+  L 3,40
+  L 18,40
+  Z
+"></path>
+</svg>
 <script>
     //构造函数设置属性和方法
     function Person(name,age,doFunc) {
@@ -34,6 +54,11 @@
     p1.doFunc();
     Person.printPersonCnt();
     console.log(typeof undefined);
+    var a = {"a":1};
+    var b = [{a:1},{b:2},{c:3}];
+    var c = true;
+    var d = 10;
+    console.log(d.toString(2));
 </script>
 </body>
 </html>

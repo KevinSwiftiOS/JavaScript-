@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    //访问函数原型对象
+    function Person(name,age) {
+        this.name = name;
+        this.age = age;
+    }
+    //原型对象 prototype
+    Person.prototype.run = function () {
+        console.log("22333");
+    }
+    //方式1 通过构造函数拿到原型化对象
+    console.log(Person.prototype);
+    //方式2 通过实例化函数拿到原型对象
+    var p = new Person();
+    console.log(p);
+    console.log(p.__proto__); //__proto__是一个非标准属性 ecmscript中没有这个属性，只是为了方便开发者调试的一个属性。
+                              //建议在开发和调试阶段使用，正式上线时不建议使用。
+     //将指向修改掉 就是真正的修改掉了
+    var newXY = {
+        "add":function () {
+            console.log("1")
+        }
+    };
+    p.__proto__ = newXY;
+    console.log(p.__proto__);
+</script>
+</body>
+</html>

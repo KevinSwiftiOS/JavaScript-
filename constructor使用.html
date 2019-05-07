@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+      function Person() {
+
+    };
+    var p = new Person();
+    console.log(p);
+    //拿到实例化对象 真实产生的构造函数
+    console.log(p.constructor.name);
+
+    Person.prototype = {
+     //   constructor:Person,//一定要把原型对象 一定要设置
+        name:"cpp",
+        age:18
+    };
+    var p1 = new Person();
+    console.log(p1);
+    console.log(p1.constructor.name);
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function Person(name,age) {
+        this.name = name;
+        this.age = age;
+    }
+    //原型对象上添加东西
+    Person.prototype.address = '上海';
+    //实例化Person
+    var p = new Person("ckq",18);
+    console.log("name" in p); //以字符串形式判断
+    console.log("address" in p); //优先在自己，找不到再到原型对象
+    //只在自己对象上，而不在原型对象上找
+    console.log(p.hasOwnProperty("name"));
+    //原型对象上是不会去找的
+    console.log(p.hasOwnProperty("address"));
+</script>
+</body>
+</html>
