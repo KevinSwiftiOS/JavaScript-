@@ -572,4 +572,176 @@ constructor就是一个标识器，标识这个对象的名字
     console.log(p1);
     console.log(p1.constructor.name);
 ```
+### 视频32重点 对象继承-原型链继承
+继承:子类拥有父类的资源
+01-原型链继承 02构造函数继承 03-组合继承 04-原型式继承 05-寄生式继承 06-寄生式组合继承 07-拷贝属性继承等
+继承意义：减少代码冗余，方便统一操作。
+继承不好：耦合性比较强。
+每个函数都可以构造出一个对象，这个对象内部有属性指向这个对象的原型对象。__proto__
+指向这个函数的原型对象。原型对象本质也是一个对象，也可以由另外一个构造函数生成，也指向构造函数的原型对象。
+如下图所示：
+<img src = "32.jpg" width = "50%" height = "50%"> 
+arr对象有Array构造函数生成，arr的__proto__指向Array的原型对象，Array构造函数的prototype也指向Array的原型对象。
+``` 
+   var arr = [1,2,3];
+    //产生的真实构造函数 拿到真实的构造函数的名字
+    console.log(arr.constructor.name);
+    //通过实例对象拿到原型 使用__proto__
+    console.log(arr.__proto__);
+    //通过构造函数拿到原型链 通过构造函数拿到原型链使用prototype
+    console.log(Array.prototype);
+    //验证 通过arr的__proto__的constructor也可以拿到构造函数
+    console.log(arr.__proto__.constructor.name);
+```
+可查看结果。
+### 视频35重点
+对象的属性和方法，访问对象的属性和方法的时候，先查找有没有对应的实例属性和方法，如果有就直接调用，没有就去该对象的原型对象上去找，如果有就直接调用，如果没有就再去原型对象的原型对象上去找。
+最终找到object.prototype,就是function，如果找不到返回null.
+``` 
+  function Person(name) {
+        this.name = name;
+        //重写toString
+        this.toString = function () {
+            console.log("我是增加在对象上的方法");
+        }
+    }
+    Person.prototype.toString = function () {
+        console.log("我是增加在原型对象上的方法");
+    }
+    var p = new Person("张三");
+    p.toString();
+    console.log(p);
+```
+重写了toString方法后，当实例化类的时候，调用的是子类的toString方法，而原型对象上的prototype方法并不会调用。
+**原型链的继承 主要分为3个步骤**
+1.构造出2个构造函数
+2.父类实例化一个对象，将子类的prototype指向父类实例化出来的对象
+3.修改子类的constructor,指向自己的构造函数
+如下
+``` 
+ function Person() {
+        this.name = "廖科";
+        this.pets = ["小煤球"];
+    }
+    
+    //student应该继承person
+      function Students() {
+          this.num = "it like";
+      }
 
+```
+第二步:
+``` 
+
+    //构造父类的实例，并且设置为子类的原型对象
+    var p = new Person();
+    //2.设置子类的原型对象为实例出来的Person对象
+    Students.prototype = p;
+```
+第三步：
+``` 
+ //修复constructor的指向即可
+    Students.prototype.constructor = Students;
+```
+当访问子类的时候，便可对应输出。
+```
+  var stu1 = new Students();
+    console.log(stu1);
+console.log(stu1.__proto__.constructor.name); 
+```
+注意，若是第三步没有修复的话，则会沿着指针链一直网上找。调用__constructor.name的时候，则会输出Person
+以下方法:
+``` 
+ Students.prototype = Person.prototype;
+    var stu = new Students();
+    console.log(stu);
+```
+原型继承是修改了。但是无法获取person上的属性,name和pets无法获得。
+链接 [__proto__和prototype的区别](https://www.jianshu.com/p/7d58f8f45557)
+### 视频38重点
+默认每个函数都有一个prototype属性，默认指向一个object对象。即为原型对象。可以增加属性和方法。
+原型对象中有constructor,指向了构造函数。
+原型对象中一般添加方法，实例出来的属性都可以拥有
+call和apply方法。bind方法
+以上都是function原型对象上的方法，
+call和apply都是借方法来实现自己的东西，call(方法真实对象，参数1，参数2) apply([参数1，参数2])
+如下:
+```
+  var demo1 = {
+        "name":"ckq",
+        log:function (param1) {
+            console.log("我是个老实人" + param1);
+        }
+    };
+    //call和apply就是借助其他对象的方法 自己没有的 去借别人的
+    var demo2 = {
+        "name":"cpp"
+    };
+    //demo2去借用demo1的方法 后面传递参数
+    demo1.log.call(demo2,"ccc");
+    //apply方法 参数以数组形式传进来
+    demo1.log.apply(demo2,["ccc"]);``` 
+```
+demo2通过借调方法拿到了demo1中的方法
+通过call和apply可以实现继承
+``` 
+  //继承里面也可以使用
+    function Person() {
+        this.name = "张三";
+        this.age = "18";
+    }
+    function Student() {
+        Person.call(this);//进行借调 student里面借调了person中的属性
+        this.sex = "男";
+    }
+    console.log(new Student());
+```
+在student的构造函数中，通过call继承拿到了person中的属性，name和age 这样在new student的时候便会输出name,age和sex.
+### 视频39重点 
+借助构造函数继承，在构造函数内部进行原型的继承，否则在原型链上的继承会对引用数据类型产生错误，从而产生第一个对象对引用
+类型的数据改变，第二个会随之改变。
+``` 
+ //继承里面也可以使用
+    function Person() {
+        this.name = "张三";
+        this.age = "18";
+    }
+    function Student() {
+        Person.call(this);//进行借调 student里面借调了person中的属性
+        this.sex = "男";
+    }
+    console.log(new Student());
+```
+以上便是采用构造继承的方式。
+### 视频40重点 寄生式组合继承
+``` 
+ //继承里面也可以使用
+    function Person(name,age) {
+        this.name = name;
+        this.age = age;
+    }
+    function Student(sex,name,age) {
+        Person.call(this,name,age);//进行借调 student里面借调了person中的属性 //上方采用组合继承
+        //注意借调父函数的操作一定要放在最前面
+        this.sex = sex;
+    }
+
+
+    //1.寄生式继承
+  //手法是产生寄生式构造函数
+ function Temp(){
+        
+ }
+ //寄生组合式继承
+ Temp.prototype = Person.prototype;
+  //实例化对象
+ var stuPrototype = new Temp();
+ Student.prototype = stuPrototype; //这里是采用寄生式继承
+ //修改constructor
+ Student.prototype.constructor = Student;
+ 
+
+    console.log(new Student("男","ckq","18"));
+ console.log(new Student("女","cq","17"));
+
+```

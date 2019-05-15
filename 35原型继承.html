@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form class="file" name="upload">
+   <div style="display: flex;">
+
+       <img src="a.jpg" style="width: 100px;height: 100px;">
+       <p style="margin-left: 10px;width:200px; line-height: 20px;height: 100px;overflow: hidden">22</p>
+   </div>
+</form>
+<script>
+        console.log(document.querySelectorAll("file")[0]);
+    function Person() {
+        this.name = "廖科";
+        this.pets = ["小煤球"];
+    }
+    Person.prototype.run = function () {
+        console.log("跑");
+    }
+    //student应该继承person
+    function Students() {
+        this.num = "it like";
+    }
+    Students.prototype = Person.prototype;
+    var stu = new Students();
+    console.log(stu);
+    //改变student原型对象的指向
+    //让student构造函数的原型对象指向Person原型对象
+
+
+    //拥有父类的实例属性和原型属性
+
+    //构造父类的实例，并且设置为子类的原型对象
+    var p = new Person();
+    //2.设置子类的原型对象为实例出来的Person对象
+    Students.prototype = p;
+    //修复constructor的指向即可
+    Students.prototype.constructor = Students;
+    var stu1 = new Students();
+    console.log(stu1);
+console.log(stu1.__proto__.constructor.name);
+    //1.构造2个函数出来
+    //2.父类构造出一个实例
+    //3.子类原型对象指向父类实例
+    //4.修复指针
+var obj = {
+    test:"hello"
+};
+Object.defineProperty(obj,"test",{
+    configurable:true,
+    enumerable:true,
+    writable:false
+});
+Object.defineProperty(obj,"test1",{
+    configurable:true,
+    enumerable:true
+})
+</script>
+</body>
+</html>

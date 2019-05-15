@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    console.log(new Object());
+    var demo1 = {
+        "name":"ckq",
+        log:function (param1) {
+            console.log("我是个老实人" + param1);
+        }
+    };
+    //call和apply就是借助其他对象的方法 自己没有的 去借别人的
+    var demo2 = {
+        "name":"cpp"
+    };
+    //demo2去借用demo1的方法 后面传递参数
+    demo1.log.call(demo2,"ccc");
+    //apply方法 参数以数组形式传进来
+    demo1.log.apply(demo2,["ccc"]);
+    //继承里面也可以使用
+    function Person() {
+        this.name = "张三";
+        this.age = "18";
+    }
+    function Student() {
+        Person.call(this);//进行借调 student里面借调了person中的属性
+        this.sex = "男";
+    }
+    console.log(new Student());
+
+console.log(+0 === -0); //true
+console.log(null === undefined); //false
+console.log(Object.is(+0,-0));//false
+console.log(NaN == NaN);//false
+console.log(Object.is(NaN,NaN));//true
+
+</script>
+</body>
+</html>

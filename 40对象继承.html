@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+
+ //继承里面也可以使用
+    function Person(name,age) {
+        this.name = name;
+        this.age = age;
+    }
+    function Student(sex,name,age) {
+        Person.call(this,name,age);//进行借调 student里面借调了person中的属性
+        //注意借调父函数的操作一定要放在最前面
+        this.sex = sex;
+    }
+
+
+    //1.寄生式继承
+  //手法是产生寄生式构造函数
+ function Temp(){
+
+ }
+ //寄生组合式继承
+ Temp.prototype = Person.prototype;
+  //实例化对象
+ var stuPrototype = new Temp();
+ Student.prototype = stuPrototype;
+ //修改constructor
+ Student.prototype.constructor = Student;
+
+
+    console.log(new Student("男","ckq","18"));
+ console.log(new Student("女","cq","17"));
+
+</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var arr = [1,2,3];
+    console.log(arr.constructor.name);
+
+    console.log(arr.__proto__.constructor.name);
+
+    //拿到Array的原型构造函数
+    console.log(Array.constructor.name);
+    console.log(Array.__proto__.constructor.name); //是function
+    console.log(Function.prototype.__proto__.constructor.name);
+    //prototype拿到原型对象 __proto__也是拿到原型对象 Object是构造函数
+    //object的原型构造函数已经走到尽头
+    console.log(Object.__proto__.constructor.name);
+</script>
+</body>
+</html>

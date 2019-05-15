@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+//原型链实战
+//画出数组的完整原型链
+    var arr = [1,2,3];
+    //产生的真实构造函数 拿到真实的构造函数的名字
+    console.log(arr.constructor.name);
+    //通过实例对象拿到原型 使用__proto__
+    console.log(arr.__proto__);
+    //通过构造函数拿到原型链 通过构造函数拿到原型链使用prototype
+    console.log(Array.prototype);
+    //验证 通过arr的__proto__的constructor也可以拿到构造函数
+    console.log(arr.__proto__.constructor.name);
+
+
+</script>
+</body>
+</html>
