@@ -613,7 +613,13 @@ arr对象有Array构造函数生成，arr的__proto__指向Array的原型对象�
     console.log(p);
 ```
 重写了toString方法后，当实例化类的时候，调用的是子类的toString方法，而原型对象上的prototype方法并不会调用。
+原始继承 sutdent的原型对象指向person的原型对象
+``` 
+student.prototype = person.prototype;
+```
+以上存在问题，构造函数中的属性和方法拿不到，原型对象中的方法和属性拿得到
 **原型链的继承 主要分为3个步骤**
+修改原型的指向 student的原型对象指向person原型对象
 1.构造出2个构造函数
 2.父类实例化一个对象，将子类的prototype指向父类实例化出来的对象
 3.修改子类的constructor,指向自己的构造函数
@@ -643,6 +649,7 @@ arr对象有Array构造函数生成，arr的__proto__指向Array的原型对象�
  //修复constructor的指向即可
     Students.prototype.constructor = Students;
 ```
+问题：继承过来的属性，如果是引用类型则会被多个实例共享
 当访问子类的时候，便可对应输出。
 ```
   var stu1 = new Students();
@@ -662,8 +669,7 @@ console.log(stu1.__proto__.constructor.name);
 默认每个函数都有一个prototype属性，默认指向一个object对象。即为原型对象。可以增加属性和方法。
 原型对象中有constructor,指向了构造函数。
 原型对象中一般添加方法，实例出来的属性都可以拥有
-call和apply方法。bind方法
-以上都是function原型对象上的方法，
+call和apply方法。bind方法，以上都是function原型对象上的方法，
 call和apply都是借方法来实现自己的东西，call(方法真实对象，参数1，参数2) apply([参数1，参数2])
 如下:
 ```
@@ -745,3 +751,51 @@ demo2通过借调方法拿到了demo1中的方法
  console.log(new Student("女","cq","17"));
 
 ```
+**可以用void 0来代替undefined 因为undefined在js中不是关键字，避免被篡改** 
+**utf8编码 用在网页上统一显示中文等东方字体。js中的字符串是utf16编码**
+js中的number类型 2^64-2^53+3
+非整数的number类型无法用==(===)也不行
+因为浮点数运算的精度导致等式左右两边不是严格相等的
+所以比较方法应该用js提供的最小精度值
+``` 
+console.log(Math.abs(0.1 + 0.2 - 0.3) < Number.EPSILON);
+```
+symbol是es6引入的新类型，表示一切非字符串的对象的key的集合
+symbol可以具有字符串类型的描述，但是即使描述相同，symbol也不相等
+装箱转换 将string，number等转换成对应对象String,Number
+拆箱转换，将String,Number转换成基本数据类型。采用valueOf或者toString方法
+valueOf方法，返回给定参数的原生Number对象值。参数可以是原生数据类型，也可以是String类型。
+toString方法，将指定类型或者对象转换成string字符串
+valueOf和toString方法区别
+1.valueOf应用于运算，toString应用于先死
+对象转换成字符串alert(test)等优先调用toString,如果没有toString方法，就按照Object的toString 方法输出.
+在进行强制字符串类型转换时优先调用toString方法，强制转化为数字优先调用valueof
+在有运算操作符的情况下，valueof优先级高于toString
+toString() 方法返回一个表示该对象的字符串。 
+valueOf() 方法返回指定对象的原始值 
+[链接1](https://blog.csdn.net/x_jagger/article/details/73430959)
+[链接2](https://www.cnblogs.com/huaan011/p/6634349.html)
+js垃圾回收机制:
+看到一个小知识。IE的垃圾回收器是根据内存分配量搞的，变量的数量有个阈值，达到这个阈值，才会运行垃圾回收机制。但是遇到一种情况，就比如说一个程序本身自带的变量就超过了这个阈值，那垃圾回收机制，就会频繁运行。性能就下降了。
+IE7之后，他们对垃圾回收器的机制做了调整，讲阈值变为动态，如果垃圾回收量低于15%，就将阈值加倍，如果回收了85%，就将阈值回复到默认值
+### 视频42重点 内置对象扩展方法
+扩充内置对象的方法
+直接扩充Array上面的方法，不能达到继承的效果，而且还有可能覆盖。所以不行。
+通过Array new出来一个新实例，随后将自己的function指向其。所以既可以有自己的方法，也可以用原来原型链上的方法。
+<img src = "42.jpg" width = "50%" height = "50%"> 
+``` 
+
+    function MyArray() {
+
+    };
+    MyArray.prototype = new Array();
+    MyArray.prototype.run = function () {
+        console.log("跑");
+    }
+    var arr3 = new MyArray();
+    console.log(arr3);
+```
+
+
+
+

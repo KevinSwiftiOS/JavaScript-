@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    Array.prototype.run = function () {
+        console.log("去");
+    }
+    //内置对象方法扩展
+    var arr = [1,2,3];
+    // arr.run = function () {
+    //     console.log("跑");
+    // }
+    arr.run();//不能继承和重复使用
+    var arr2 = [2];
+    //通过原型标签添加方法
+
+
+    function MyArray() {
+
+    };
+    MyArray.prototype = new Array();
+    MyArray.prototype.run = function () {
+        console.log("跑");
+    }
+    var arr3 = new MyArray();
+    console.log(arr3);
+</script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    //animal类
+    function Animal(name,age) {
+        this.name = name;
+        this.age = age;
+    }
+    Animal.prototype.eat = function () {
+        console.log("吃");
+    }
+
+    Animal.prototype.run = function () {
+        console.log("跑");
+    }
+
+    //person类
+    function Person(job,name,age) {
+        //借助构造函数继承
+        Animal.call(this,name,age);
+        this.job = job;
+
+    }
+
+    //2.原型链继承和寄生式继承
+    function Temp() {
+
+    }
+    //继承完善
+    Temp.prototype = Animal.prototype;
+    var personPrototype = new Temp();
+    personPrototype.constructor = Person;
+    Person.prototype = personPrototype;
+    //继承放到最后面
+    Person.prototype.jump = function () {
+        console.log("跳");
+    }
+    var p = new Person("讲师","曹凯强",18);
+    console.log(p);
+
+    //student类
+    function Student(name,age) {
+        this.name = name;
+        this.age = age;
+
+    }
+    Student.prototype.study = function () {
+        console.log("学习");
+    }
+    //实现继承关系
+
+
+
+
+</script>
+</body>
+</html>

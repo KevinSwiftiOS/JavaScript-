@@ -35,7 +35,27 @@
 
     console.log(new Student("男","ckq","18"));
  console.log(new Student("女","cq","17"));
+var a = undefined;
+console.log(Math.abs(0.1 + 0.2 - 0.3) < Number.EPSILON);
+var mySymbol = Symbol("my symbol");
+var b = "1";
+var test = {
+    age:20,
 
+    // valueOf:function () {
+    //     console.log("to value");
+    //     return this.age - 1;
+    // }
+}
+console.log(Number(test));
+
+ function fn() {
+     return 20;
+ }
+
+ console.log(fn.valueOf());
+ console.log(fn + 'hello');
+ console.log(new Object());
 </script>
 </body>
 </html>
