@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    //简单工厂模式
+    //咖啡机 用户材料不同 浓度不同
+    function makeCoffee(dou,water) {
+     var obj = new Object();
+     obj.dou = dou; //豆
+     obj.water = water;//水
+     obj.bili = dou / water;//比例
+        return obj;
+    }
+    var coffee = makeCoffee(1,10);
+    console.log(coffee.bili);
+</script>
+</body>
+</html>

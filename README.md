@@ -795,6 +795,196 @@ IE7之后，他们对垃圾回收器的机制做了调整，讲阈值变为动�
     var arr3 = new MyArray();
     console.log(arr3);
 ```
+### 视频43重点 对象拷贝 浅拷贝
+栈区和堆区的区别 栈区里面的都是值拷贝
+堆区里面的都是地址拷贝
+a = 20
+b = a 值拷贝
+浅拷贝只是拷贝地址 所以改变堆区里的东西会发生影响
+``` 
+ var obj = {name:"廖科",age:18};
+    var copy = {};;
+    //进行浅拷贝即可
+    for(var key in obj){
+        copy[key] = obj[key];
+    }
+    obj.name = "cc";
+    console.log(obj);
+    console.log(copy);
+
+    //利用object.assign进行浅拷贝
+    Object.assign(copy,obj,{address:"沙沟湖"});
+    console.log(copy);
+```
+可以用for in或者assign函数进行拷贝
+``` 
+console.log(obj);
+console.log(copy);
+copy.pets.push(22);
+    console.log(obj);
+    console.log(copy);
+```
+改变copy的也会改变obj内的东西
+### 视频44重点 实现深拷贝
+``` 
+ var obj = {
+        "name": "ckq",
+        "age": 18,
+        "friend": ["a", "b"]
+    };
+    //实现深拷贝
+    function deepCopyNewObj(fromObj,toObj) {
+     //在函数中检查第一个对象是否有值，如果没有的话就初始化一个空的对象
+     //如果有值的话就进行遍历 检查数据是什么类型 如果是基本的就进行值拷贝
+        //如果是复杂的 就产生一个新的对象或数组进行深拷贝
+        for(var key in fromObj){
+            var fromValue = fromObj[key];
+            if(!isObject(fromValue)){
+                toObj[key] = fromValue;
+            }else{
+                //复杂数据类型
+                //如果是引用数据类型的话 就再去调用一次这个方法 去内部拷贝这个对象的所有属性
+                var tempObj = new fromValue.constructor; //拿到构造函数产生
+                //自己还要进行递归操作，内部还有东西 tempObj原先是空的，随后不断的调用自己 将值拷贝进这个空的对象中
+
+                deepCopyNewObj(fromValue,tempObj);
+                toObj[key] = tempObj;
+            }
+        }
+    }
+    //判断类型
+    function isObject(obj) {
+        return obj instanceof Object;
+    }
+    function isArray(obj) {
+        return Array.isArray(obj); //这种方式更好
+        return Object.prototype.toString.call(obj) == '[object Array]'
+    }
+```
+1.实现深拷贝的一个步骤，构造一个函数，
+2.遍历对象，当对象的值时基本类型的时候，则进行值拷贝
+3.当发现是引用树类型的时候，拿到改指定的构造函数产生一个新对象，是数组或者是对象，随后递归调用自己，将内部的值进行拷贝。
+随后当递归结束后，将结束后的值进行值拷贝即可。
+核心代码
+``` 
+  //复杂数据类型
+                //如果是引用数据类型的话 就再去调用一次这个方法 去内部拷贝这个对象的所有属性
+                var tempObj = new fromValue.constructor; //拿到构造函数产生 __proto__是隐式的 所以可以不显示调用
+                //自己还要进行递归操作，内部还有东西 tempObj原先是空的，随后不断的调用自己 将值拷贝进这个空的对象中
+
+                deepCopyNewObj(fromValue,tempObj);
+                toObj[key] = tempObj;
+```
+进行验证
+``` 
+   //相当于在堆中新开辟了一个空间，由不同指针指向
+    deepCopyNewObj(obj,temp);
+    temp.friend.push("c");
+    console.log(temp);
+    console.log(obj);
+```
+temp中push一个新的不影响obj中的。
+表明深拷贝成功。
+### 视频45重点 私有变量和函数
+私有：是一种访问权限，这种权限，是一个对象自己特有的，任何其他对象无法访问，外界也无法访问。
+js中没有类的继承，实现私有 核心：唯一有作用域的是函数，函数特性来实现私有，
+特权方法：能访问到私有变量和函数的方法称之为**特权方法**。
+在函数体内部创建，用var来表示，是函数体内部私有的，外部访问不到
+``` 
+  function Calculator() {
+        //私有变量
+        var result = 0;
+        //私有函数
+        function checkNum(num) {
+            var isNum = typeof num === 'number';
+            if(!isNum) {
+                alert("不是数字");
+                return;
+            }
+         return isNum;
+        }
+        this.add = function (num) {
+            result += num;
+            //方便链式调用 将this返回回去
+            return this;
+        }
+       this.logresult = function () {
+           console.log(result);
+           return this;
+       }
+    }
+    var c = new Calculator();
+    c.add(2).logresult();
+    c.result = 100;//可以拿到并且修改
+    console.log(c.result);
+```
+### 视频52 验证js是单线程的
+浏览器的运行现在是多线程的，一个操作系统内部有多个进程，随后进程内部有多个线程，线程有时共享进程的一部分资源。
+js是单线程运行的，可以用定时器的构造函数进行验证。
+``` 
+<button id = "btn">点我</button>
+<script>
+    var btn = document.getElementById("btn");
+    var timeId = null;
+    btn.onclick = function (ev) {
+        //定时器操作
+        //清除定时器
+        clearTimeout(timeId);
+      //2获取当前时间
+        var cTime = Date.now();
+        console.log("之前");
+        //3.开启定时器 200毫秒之后执行
+        setTimeout(function () {
+            console.log(Date.now() - cTime, "ms后执行");
+        //在一定范围内最接近的值去执行
+            },200);
+        console.log("之后");
+    //4 耗时的任务
+        for(var i = 0; i < 999999;i++){
+
+        }
+
+    }
+</script>
+```
+为button添加一个点击事件，随后设置定时器的id，进来时第一步首先要清除定时器。随后设置延时器，延时200毫秒后执行，
+可以看出打印的结果为，**之前，之后，随后再是204ms后执行**,
+所以，js是单线程执行的，他看到一个setTimeout的操作，如果是多线程的话，会再开一个线程给他操作，然而是先打印之前，
+之后，再去执行定时器，如果for循环比较多的话，则会延时的更加厉害，所以说js是单线程的。setTimeout这种都是回调代码，必须等
+初始化代码执行完再去执行回调代码。
+### 视频53重点 js为什么使用单线程
+js使用单线程的原因，因为js是浏览器的脚本语言，主要作用是与用户交互，操作DOM,
+如果js是多线程的话，会产生许多莫名其妙的错误。
+### 视频54重点 事件循环模型
+浏览器内核组成：1.html css文件解析模块 负责页面文本解析
+              2.dom css模块 负责dom/css在内存中的相关处理
+              3.布局和渲染模块 负责页面的布局和效果绘制
+              4.定时器模块 负责定时器的管理
+              5.网络需求模块 负责服务端请求(ajax/常规)
+              6.事件响应模块 负责事件的管理
+通过内核调用一个一个的模块，处理js的请求。
+js的事件循环模型：
+<img src = "./images/54.jpg" width = "50%" height = "50%">
+浏览器中可分为多个模块 一个是js引擎模块，他是单线程执行的，二是浏览器api模块，他是多线程执行的，三是循环队列。
+浏览器先利用js引擎初始化代码，将回调函数放到循环队列中，随后将dom的一些操作有浏览器api相结合。随后当浏览器点击等产生回调函数后，将回调函数放到循环队列中，当初始化代码都执行完毕了，再根据优先级，去执行循环队列中的回调函数。
+#### 模块的组成：
+事件管理模块和回调模块
+#### 代码分类：
+1.初始化执行代码(同步代码) 包含绑定DOM事件的监听，设置定时器，发送ajax请求等。
+2.回调执行代(异步代码) 处理回调的逻辑。
+#### 模型的运转流程
+1.执行初始化代码 将事件回调函数交给对应模块处理
+2.当事件发生时，管理模块会将回调函数及其数据添加到回调队列中。
+3.只有当初始化代码执行完毕后，才会遍历读取回调队列中的回调函数执行。
+### 视频55重点 设计模式
+什么叫设计模式：是为了解决在开发中可能遇到的一些需求，而提出的一套解决方法。
+设计模式的本质目的是为了项目变化造成的影响。
+设计模式目的：1.高内聚低耦合，2.提高重用性，减少冗余代码。3.扩展性 4.稳定性
+工厂设计模式：简单工程模式：给定属性和材料，进行批量生产。
+工厂模式应用场景：不关心创建过程，创建过程比较少，依赖具体环境创建不同实例，
+存储token:根据浏览器产生不同的存储对象。
+              
+
 
 
 

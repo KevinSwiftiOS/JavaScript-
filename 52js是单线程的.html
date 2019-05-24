@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button id = "btn">点我</button>
+<script>
+    var btn = document.getElementById("btn");
+    var timeId = null;
+    btn.onclick = function (ev) {
+        //定时器操作
+        //清除定时器
+        clearTimeout(timeId);
+      //2获取当前时间
+        var cTime = Date.now();
+        console.log("之前");
+        //3.开启定时器 200毫秒之后执行
+        setTimeout(function () {
+            console.log(Date.now() - cTime, "ms后执行");
+        //在一定范围内最接近的值去执行
+            },200);
+        console.log("之后");
+    //4 耗时的任务
+        for(var i = 0; i < 999999;i++){
+
+        }
+
+    }
+</script>
+</body>
+</html>

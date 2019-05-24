@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var obj = {
+        "name": "ckq",
+        "age": 18,
+        "friend": ["a", "b"]
+    };
+    //实现深拷贝
+    function deepCopyNewObj(fromObj,toObj) {
+     //在函数中检查第一个对象是否有值，如果没有的话就初始化一个空的对象
+     //如果有值的话就进行遍历 检查数据是什么类型 如果是基本的就进行值拷贝
+        //如果是复杂的 就产生一个新的对象或数组进行深拷贝
+        for(var key in fromObj){
+            var fromValue = fromObj[key];
+            if(!isObject(fromValue)){
+                toObj[key] = fromValue;
+            }else{
+                //复杂数据类型
+                //如果是引用数据类型的话 就再去调用一次这个方法 去内部拷贝这个对象的所有属性
+                var tempObj = new fromValue.constructor; //拿到构造函数产生
+                //自己还要进行递归操作，内部还有东西 tempObj原先是空的，随后不断的调用自己 将值拷贝进这个空的对象中
+
+                deepCopyNewObj(fromValue,tempObj);
+                toObj[key] = tempObj;
+            }
+        }
+    }
+    //判断类型
+    function isObject(obj) {
+        return obj instanceof Object;
+    }
+    function isArray(obj) {
+        return Array.isArray(obj); //这种方式更好
+        return Object.prototype.toString.call(obj) == '[object Array]'
+    }
+    var temp = {};
+    //相当于在堆中新开辟了一个空间，由不同指针指向
+    deepCopyNewObj(obj,temp);
+    temp.friend.push("c");
+    console.log(temp);
+    console.log(obj);
+</script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var obj = {name:"廖科",age:18};
+    var copy = {};;
+    //进行浅拷贝即可
+    for(var key in obj){
+        copy[key] = obj[key];
+    }
+    obj.name = "cc";
+    console.log(obj);
+    console.log(copy);
+
+    //利用object.assign进行浅拷贝
+    Object.assign(copy,obj,{address:"沙沟湖"});
+    console.log(copy);
+
+var obj = {name:"开",pets:['小煤球']};
+Object.assign(copy,obj);
+console.log(obj);
+console.log(copy);
+copy.pets.push(22);
+    console.log(obj);
+    console.log(copy);
+
+</script>
+</body>
+</html>
