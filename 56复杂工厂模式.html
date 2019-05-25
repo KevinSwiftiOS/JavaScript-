@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    //果汁工厂
+    function FruitMaker() {
+        //具备生产苹果的能力
+
+    }
+    FruitMaker.prototype.make = function (type,meta) {
+        //进行生产 判断工厂是否具备生产能力
+        if(typeof this[type] === 'function') {
+            //判断当前这个type是具有构造的function 如果有说明有生产线
+            var func = this[type];
+            func.prototype = FruitMaker.prototype;
+            return new func(meta); //返回生产线
+        }else{
+            //代表工厂中没有生产线
+            throw '工厂不能生产这个产品';
+        }
+
+
+    }
+    //具备生产线 扩展生产能力
+    FruitMaker.prototype.extend = function (obj) {
+        for(var key in obj){
+            //产生类似方法
+            this[key] = obj[key];
+        }
+    }
+    //造苹果汁
+    FruitMaker.prototype.extend({
+        'Apple':function (meta) {
+            console.log("造了一个苹果汁",meta);
+        },
+        //随后这个对象会分配给内部的key this[key] = obj[key];
+        'Pear':function (meta) {
+            console.log("造了一个梨子汁",meta);
+        }
+    })
+    //实例化水果工厂
+    var fruitMaker = new FruitMaker();
+    var appleObj = fruitMaker.make('Apple','一个苹果，一斤水');
+     console.log(appleObj.constructor.name); //这里输出的是apple() 所以工厂应该都是同一个 里面的车间可以不相同 暴露给外部的必须都相同
+
+
+
+
+
+</script>
+</body>
+</html>

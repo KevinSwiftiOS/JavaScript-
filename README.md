@@ -983,7 +983,65 @@ js的事件循环模型：
 工厂设计模式：简单工程模式：给定属性和材料，进行批量生产。
 工厂模式应用场景：不关心创建过程，创建过程比较少，依赖具体环境创建不同实例，
 存储token:根据浏览器产生不同的存储对象。
-              
+### 视频56重点 复杂工厂模式
+可以生产多种不同的产品 产品一样 但是属性不一样 生产线 产果汁 产香蕉汁等
+我们生产一个构造函数fruitMaker是一个创建工厂。fruitMaker中扩展方法extend在这其中可以加入苹果汁和梨子汁的构造方法。
+``` 
+  //具备生产线 扩展生产能力
+    FruitMaker.prototype.extend = function (obj) {
+        for(var key in obj){
+            //产生类似方法
+            this[key] = obj[key];
+        }
+    }
+```
+将obj遍历 将obj中的赋值到this中
+随后调用，进行造果汁
+``` 
+ //造苹果汁
+    FruitMaker.prototype.extend({
+        'Apple':function (meta) {
+            console.log("造了一个苹果汁",meta);
+        },
+        //随后这个对象会分配给内部的key this[key] = obj[key];
+        'Pear':function (meta) {
+            console.log("造了一个梨子汁",meta);
+        }
+    })
+```
+随后进行生产，当传入一个时，比如传入Apple，要判断该工厂是否具有生产能力，具有生产能力后才进行生产。
+``` 
+//果汁工厂
+    function FruitMaker() {
+        //具备生产苹果的能力
+
+    }
+    FruitMaker.prototype.make = function (type,meta) {
+        //进行生产 判断工厂是否具备生产能力
+        if(typeof this[type] === 'function') {
+            //判断当前这个type是具有构造的function 如果有说明有生产线
+            var func = this[type];
+            func.prototype = FruitMaker.prototype;
+            return new func(meta); //返回生产线
+        }else{
+            //代表工厂中没有生产线
+            throw '工厂不能生产这个产品';
+        }
+
+
+    }
+```
+只需要判断typeof this[type]是否是个function,如果是一个函数的话说明具有生产线。则可以进行生产，否则就抛出异常，另外构造的生产线的func需要改变原型指针指引，指向该工厂FruitMaker.
+这样既可。
+进行调用。
+``` 
+ //实例化水果工厂
+    var fruitMaker = new FruitMaker();
+    var appleObj = fruitMaker.make('Apple','一个苹果，一斤水');
+     console.log(appleObj.constructor.name); //这里输出的是apple() 所以工厂应该都是同一个 里面的车间可以不相同 暴露给外部的必须都相同
+
+```
+可以看出打印出配料一个苹果，一斤水和constructor.name是FruitMaker,是水果工厂的构造器。
 
 
 
