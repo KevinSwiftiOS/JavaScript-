@@ -1042,8 +1042,67 @@ js的事件循环模型：
 
 ```
 可以看出打印出配料一个苹果，一斤水和constructor.name是FruitMaker,是水果工厂的构造器。
+### 视频58重点 单例设计模式
+概念：在整个程序的运行过程当中，
+**一个类型只有一个实例对象** 全局中
+通过指定的构造函数，无论创建多少次对象，都只有一个
+全局用户信息，登录/注册 只有一个
+js实现单例设计模式：1.全局变量 2.静态属性 3.闭包-惰性函数
+老的方法
+``` 
+ function Tool() {
+
+    }
+    var t1 = new Tool();
+    var t2 = new Tool();
+    var t3 = new Tool();
+    var t4 = new Tool();
+    console.log(t1 === t2);
+    //单例设计模式 无论实例化出来多少对象 其内存空间都是一样的
+    //t1 = t2 = t3 = t4
 
 
+```
+实例构造出来的t1，t2,t3,t4在内存中占得地址都不相同，因此不是单例模式。
+应用场景：全局只有一个
+利用全局变量
+在构造函数中进行判断，如果构造函数中没有，则创建，否则返回该全局变量
+``` 
+  //全局变量的单例模式
+    var instance = null;
+    function Tool() {
+        //1.判断instance是否有值
+        if(instance)
+            return instance;
+        //2.处理指向 指向当前创建的
+        instance = this;
+        this.name = "廖科";
+        this.age = 18;
+    }
+    //进行实例化
+    var t1 = new Tool();
+    var t2 = new Tool();
+    console.log(t1 === t2);
 
-
-
+```
+缺点：使用全局变量来保存单例实例，该全局变量可能在作用域中修改，或可能被覆盖
+修改之后，创建出来的实例对象就不是原来的实例对象了。
+### 视频59重点 即时闭包函数
+2.即时构造函数，将instance隐藏进window中，这样可以避免外界访问从而修改。
+``` 
+  (function (w) {
+        var instance = null;
+        function Tool() {
+            if(instance)
+                return instance;
+            instance = this;
+            this.age = 18;
+            this.name = "ckq";
+        }
+        w.Tool = Tool;//把tool构造函数作为window的全局变量来引用着
+    })(window);
+    var t1 = new Tool();
+    var t2 = new Tool();
+    console.log(t1 === t2);
+```
+将全局变量window传进，可以避免外部对instance的污染。保证单例。

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function Tool() {
+
+    }
+    var t1 = new Tool();
+    var t2 = new Tool();
+    var t3 = new Tool();
+    var t4 = new Tool();
+    console.log(t1 === t2);
+    //单例设计模式 无论实例化出来多少对象 其内存空间都是一样的
+    //t1 = t2 = t3 = t4
+    //全局变量的单例模式
+    var instance = null;
+    function Tool() {
+        //1.判断instance是否有值
+        if(instance)
+            return instance;
+        //2.处理指向 指向当前创建的
+        instance = this;
+        this.name = "廖科";
+        this.age = 18;
+    }
+    //进行实例化
+    var t1 = new Tool();
+    var t2 = new Tool();
+    console.log(t1 === t2);
+
+</script>
+</body>
+</html>

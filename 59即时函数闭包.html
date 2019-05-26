@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    (function (w) {
+        var instance = null;
+        function Tool() {
+            if(instance)
+                return instance;
+            instance = this;
+            this.age = 18;
+            this.name = "ckq";
+        }
+        w.Tool = Tool;//把tool构造函数作为window的全局变量来引用着
+    })(window);
+    var t1 = new Tool();
+    var t2 = new Tool();
+    console.log(t1 === t2);
+</script>
+</body>
+</html>
